@@ -259,7 +259,7 @@ claude-profile() {
 
         help|-h|--help)
             cat <<'HELPEOF'
-Usage: cpr [command] [args...]
+Usage: clp [command] [args...]
 
 Commands:
     (no command)            Show current profile status
@@ -272,16 +272,16 @@ Commands:
     help, -h, --help        Show this help message
 
 The claude command automatically uses the default profile. Use
-'cpr -u <name>' to override for the current session.
+'clp -u <name>' to override for the current session.
 
-'cpr' is a shorthand for 'claude-profile'. Both work interchangeably.
+'clp' is a shorthand for 'claude-profile'. Both work interchangeably.
 
 Examples:
-    cpr -c work
-    cpr -d work
-    cpr -u work
+    clp -c work
+    clp -d work
+    clp -u work
     claude                          # runs with "work" profile
-    cpr                             # shows active/default status
+    clp                             # shows active/default status
 HELPEOF
             ;;
 
@@ -321,5 +321,5 @@ HELPEOF
     esac
 }
 
-# --- cpr: short alias for claude-profile ---
-cpr() { claude-profile "$@"; }
+# --- clp: short alias for claude-profile ---
+clp() { claude-profile "$@"; }

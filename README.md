@@ -24,11 +24,11 @@ The installer downloads the appropriate scripts and configures your shell. **Res
 
 ```sh
 # Create profiles
-cpr -c work
-cpr -c personal
+clp -c work
+clp -c personal
 
 # Set a default
-cpr -d work
+clp -d work
 
 # Just use claude — it automatically uses your default profile
 claude
@@ -36,22 +36,22 @@ claude --resume
 claude -p "explain this code"
 ```
 
-> `cpr` is a shorthand for `claude-profile`. Both work interchangeably.
+> `clp` is a shorthand for `claude-profile`. Both work interchangeably.
 
 ## Commands
 
 | Command | Alias | Description |
 |---------|-------|-------------|
-| `cpr` | | Show current profile status |
-| `cpr use <name>` | `-u` | Switch to a profile for this session |
-| `cpr create <name>` | `-c` | Create a new profile |
-| `cpr list` | `ls`, `-l` | List all profiles |
-| `cpr default [name]` | `-d` | Get or set the default profile |
-| `cpr which [name]` | `-w` | Show the config directory path |
-| `cpr delete <name>` | `rm` | Delete a profile (with confirmation) |
-| `cpr help` | `-h`, `--help` | Show help |
+| `clp` | | Show current profile status |
+| `clp use <name>` | `-u` | Switch to a profile for this session |
+| `clp create <name>` | `-c` | Create a new profile |
+| `clp list` | `ls`, `-l` | List all profiles |
+| `clp default [name]` | `-d` | Get or set the default profile |
+| `clp which [name]` | `-w` | Show the config directory path |
+| `clp delete <name>` | `rm` | Delete a profile (with confirmation) |
+| `clp help` | `-h`, `--help` | Show help |
 
-> `cpr` and `claude-profile` are interchangeable.
+> `clp` and `claude-profile` are interchangeable.
 
 ## How It Works
 
@@ -69,11 +69,11 @@ To temporarily use a different profile in the current shell session:
 
 ```sh
 # Temporarily use a different profile
-cpr -u personal
+clp -u personal
 claude                          # uses "personal" for this shell session
 ```
 
-The override lasts until you close the shell or run `cpr -u` again.
+The override lasts until you close the shell or run `clp -u` again.
 
 ### Profile Storage
 
@@ -132,7 +132,7 @@ $dir = "$env:LOCALAPPDATA\claude-profile"
 New-Item -ItemType Directory -Force -Path $dir | Out-Null
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/claude-profile-init.ps1" -OutFile "$dir\claude-profile-init.ps1"
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/claude-profile.cmd" -OutFile "$dir\claude-profile.cmd"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/cpr.cmd" -OutFile "$dir\cpr.cmd"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/clp.cmd" -OutFile "$dir\clp.cmd"
 # Add to PowerShell profile
 Add-Content -Path $PROFILE -Value ". '$dir\claude-profile-init.ps1'"
 # Add to PATH for cmd.exe

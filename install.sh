@@ -161,11 +161,11 @@ main() {
         info "Restart your shell, then:"
     fi
     info ""
-    info "  cpr -c work                   # Create a profile"
-    info "  cpr -d work                   # Set it as default"
+    info "  clp -c work                   # Create a profile"
+    info "  clp -d work                   # Set it as default"
     info "  claude                         # Runs with the active profile"
     info ""
-    info "Run 'cpr help' for all commands. ('cpr' is a shorthand for 'claude-profile')"
+    info "Run 'clp help' for all commands. ('clp' is a shorthand for 'claude-profile')"
     printf '\n'
 }
 

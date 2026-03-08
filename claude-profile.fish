@@ -226,7 +226,7 @@ function claude-profile
             end
 
         case help -h --help
-            echo "Usage: cpr [command] [args...]"
+            echo "Usage: clp [command] [args...]"
             echo ""
             echo "Commands:"
             echo "    (no command)            Show current profile status"
@@ -239,9 +239,9 @@ function claude-profile
             echo "    help, -h, --help        Show this help message"
             echo ""
             echo "The claude command automatically uses the default profile. Use"
-            echo "'cpr -u <name>' to override for the current session."
+            echo "'clp -u <name>' to override for the current session."
             echo ""
-            echo "'cpr' is a shorthand for 'claude-profile'. Both work interchangeably."
+            echo "'clp' is a shorthand for 'claude-profile'. Both work interchangeably."
 
         case ''
             set -l active ""
@@ -274,7 +274,7 @@ function claude-profile
     end
 end
 
-# --- cpr: short alias for claude-profile ---
-function cpr
+# --- clp: short alias for claude-profile ---
+function clp
     claude-profile $argv
 end

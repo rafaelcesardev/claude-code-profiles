@@ -277,7 +277,7 @@ function claude-profile {
 
         { $_ -in 'help', '-h', '--help' } {
             Write-Host @"
-Usage: cpr [command] [args...]
+Usage: clp [command] [args...]
 
 Commands:
     (no command)            Show current profile status
@@ -290,16 +290,16 @@ Commands:
     help, -h, --help        Show this help message
 
 The claude command automatically uses the default profile. Use
-'cpr -u <name>' to override for the current session.
+'clp -u <name>' to override for the current session.
 
-'cpr' is a shorthand for 'claude-profile'. Both work interchangeably.
+'clp' is a shorthand for 'claude-profile'. Both work interchangeably.
 
 Examples:
-    cpr -c work
-    cpr -d work
-    cpr -u work
+    clp -c work
+    clp -d work
+    clp -u work
     claude                          # runs with "work" profile
-    cpr                             # shows active/default status
+    clp                             # shows active/default status
 "@
         }
 
@@ -339,5 +339,5 @@ Examples:
     }
 }
 
-# --- cpr: short alias for claude-profile ---
-function cpr { claude-profile @args }
+# --- clp: short alias for claude-profile ---
+function clp { claude-profile @args }
