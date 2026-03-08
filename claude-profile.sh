@@ -120,7 +120,7 @@ claude-profile() {
             if [ -f "$_cp_default_file" ]; then
                 _cp_cur_default=$(cat "$_cp_default_file")
             fi
-            # Derive active profile name from CLAUDE_CONFIG_DIR
+            # Derive active profile: explicit session override or implicit default
             _cp_active=""
             if [ -n "${CLAUDE_CONFIG_DIR:-}" ]; then
                 case "$CLAUDE_CONFIG_DIR" in
@@ -128,6 +128,8 @@ claude-profile() {
                         _cp_active=$(basename "$CLAUDE_CONFIG_DIR")
                         ;;
                 esac
+            else
+                _cp_active="$_cp_cur_default"
             fi
             _cp_found=0
             for _cp_entry in "$_cp_data"/*/; do
@@ -142,14 +144,14 @@ claude-profile() {
                 if [ "$_cp_entry_name" = "$_cp_active" ]; then
                     _cp_is_active=1
                 fi
-                if [ "$_cp_is_default" -eq 1 ] && [ "$_cp_is_active" -eq 1 ]; then
-                    printf '>* %s (default, active)\n' "$_cp_entry_name"
-                elif [ "$_cp_is_default" -eq 1 ]; then
-                    printf ' * %s (default)\n' "$_cp_entry_name"
+                if [ "$_cp_is_active" -eq 1 ] && [ "$_cp_is_default" -eq 1 ]; then
+                    printf '* %s (default)\n' "$_cp_entry_name"
                 elif [ "$_cp_is_active" -eq 1 ]; then
-                    printf '>  %s (active)\n' "$_cp_entry_name"
+                    printf '* %s\n' "$_cp_entry_name"
+                elif [ "$_cp_is_default" -eq 1 ]; then
+                    printf '  %s (default)\n' "$_cp_entry_name"
                 else
-                    printf '   %s\n' "$_cp_entry_name"
+                    printf '  %s\n' "$_cp_entry_name"
                 fi
             done
             if [ "$_cp_found" -eq 0 ]; then

@@ -108,11 +108,14 @@ function claude-profile
             if test -f "$def_file"
                 set cur_default (cat "$def_file")
             end
+            # Derive active profile: explicit session override or implicit default
             set -l active ""
             if set -q CLAUDE_CONFIG_DIR
                 if string match -q "$_CP_DATA/*" -- "$CLAUDE_CONFIG_DIR"
                     set active (basename "$CLAUDE_CONFIG_DIR")
                 end
+            else
+                set active "$cur_default"
             end
             set -l found 0
             for entry in "$_CP_DATA"/*/
@@ -121,14 +124,14 @@ function claude-profile
                 set found 1
                 set -l is_default (test "$entry_name" = "$cur_default"; and echo 1; or echo 0)
                 set -l is_active  (test "$entry_name" = "$active";      and echo 1; or echo 0)
-                if test "$is_default" = 1 -a "$is_active" = 1
-                    echo ">* $entry_name (default, active)"
-                else if test "$is_default" = 1
-                    echo " * $entry_name (default)"
+                if test "$is_active" = 1 -a "$is_default" = 1
+                    echo "* $entry_name (default)"
                 else if test "$is_active" = 1
-                    echo ">  $entry_name (active)"
+                    echo "* $entry_name"
+                else if test "$is_default" = 1
+                    echo "  $entry_name (default)"
                 else
-                    echo "   $entry_name"
+                    echo "  $entry_name"
                 end
             end
             if test "$found" = 0

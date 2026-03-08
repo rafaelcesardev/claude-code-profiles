@@ -147,7 +147,7 @@ function claude-profile {
             if (Test-Path $DefaultFile) {
                 $CurDefault = (Get-Content $DefaultFile -Raw).Trim()
             }
-            # Derive active profile name from CLAUDE_CONFIG_DIR
+            # Derive active profile: explicit session override or implicit default
             $Active = ''
             if ($env:CLAUDE_CONFIG_DIR) {
                 $Normalized = $env:CLAUDE_CONFIG_DIR.Replace('\', '/')
@@ -155,6 +155,8 @@ function claude-profile {
                 if ($Normalized.StartsWith("$NormalizedData/")) {
                     $Active = Split-Path $env:CLAUDE_CONFIG_DIR -Leaf
                 }
+            } else {
+                $Active = $CurDefault
             }
             $Entries = Get-ChildItem -Path $DataDir -Directory -ErrorAction SilentlyContinue
             if (-not $Entries -or $Entries.Count -eq 0) {
@@ -164,14 +166,14 @@ function claude-profile {
             foreach ($Entry in $Entries) {
                 $IsDefault = ($Entry.Name -eq $CurDefault)
                 $IsActive = ($Entry.Name -eq $Active)
-                if ($IsDefault -and $IsActive) {
-                    Write-Host ">* $($Entry.Name) (default, active)"
-                } elseif ($IsDefault) {
-                    Write-Host " * $($Entry.Name) (default)"
+                if ($IsActive -and $IsDefault) {
+                    Write-Host "* $($Entry.Name) (default)"
                 } elseif ($IsActive) {
-                    Write-Host ">  $($Entry.Name) (active)"
+                    Write-Host "* $($Entry.Name)"
+                } elseif ($IsDefault) {
+                    Write-Host "  $($Entry.Name) (default)"
                 } else {
-                    Write-Host "   $($Entry.Name)"
+                    Write-Host "  $($Entry.Name)"
                 }
             }
         }

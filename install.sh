@@ -128,12 +128,8 @@ main() {
         _fish_conf_d="${XDG_CONFIG_HOME:-$HOME/.config}/fish/conf.d"
         mkdir -p "$_fish_conf_d"
         _fish_conf_file="${_fish_conf_d}/claude-profile.fish"
-        if [ -f "$_fish_conf_file" ] && grep -qF 'claude-profile' "$_fish_conf_file" 2>/dev/null; then
-            info "Fish conf.d file already exists: $_fish_conf_file"
-        else
-            printf '# claude-profile: manage Claude Code configuration profiles\nsource "%s/claude-profile.fish"\n' "$INSTALL_DIR" > "$_fish_conf_file"
-            info "Created: $_fish_conf_file"
-        fi
+        printf '# claude-profile: manage Claude Code configuration profiles\nsource "%s/claude-profile.fish"\n' "$INSTALL_DIR" > "$_fish_conf_file"
+        info "Installed: $_fish_conf_file"
     else
         # Bash/Zsh: source line in shell profile
         # Single quotes are intentional: the expression must expand in the

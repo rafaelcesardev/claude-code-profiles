@@ -164,12 +164,26 @@ if exist "%DEFAULT_FILE%" (
     set /p _cl_default=<"%DEFAULT_FILE%"
 )
 
+:: Derive active profile: explicit session override or implicit default
+set "_cl_active="
+if defined CLAUDE_CONFIG_DIR (
+    for %%a in ("%CLAUDE_CONFIG_DIR%") do set "_cl_active=%%~nxa"
+) else (
+    set "_cl_active=!_cl_default!"
+)
+
 set "_cl_found=0"
 for /d %%d in ("%DATA_DIR%\*") do (
     set "_cl_found=1"
     set "_cl_name=%%~nxd"
-    if "!_cl_name!"=="!_cl_default!" (
-        echo * !_cl_name! (default^)
+    if "!_cl_name!"=="!_cl_active!" (
+        if "!_cl_name!"=="!_cl_default!" (
+            echo * !_cl_name! (default^)
+        ) else (
+            echo * !_cl_name!
+        )
+    ) else if "!_cl_name!"=="!_cl_default!" (
+        echo   !_cl_name! (default^)
     ) else (
         echo   !_cl_name!
     )
