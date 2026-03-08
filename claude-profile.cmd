@@ -68,7 +68,7 @@ goto :cmd_delete
 :: --- Usage ---
 
 :usage
-echo Usage: claude-profile [command] [args...]
+echo Usage: cpr [command] [args...]
 echo.
 echo Commands:
 echo     (no command)            Activate the default profile
@@ -80,13 +80,15 @@ echo     delete, rm ^<name^>       Delete a profile
 echo     which, -w [name]        Show the resolved config directory path
 echo     help, -h, --help        Show this help message
 echo.
-echo Use 'call claude-profile use ^<name^>' to set CLAUDE_CONFIG_DIR in the
+echo Use 'call cpr -u ^<name^>' to set CLAUDE_CONFIG_DIR in the
 echo current cmd session, then run 'claude' separately.
 echo.
+echo 'cpr' is a shorthand for 'claude-profile'. Both work interchangeably.
+echo.
 echo Examples:
-echo     claude-profile create work
-echo     claude-profile default work
-echo     call claude-profile use work     # activates "work" profile
+echo     cpr -c work
+echo     cpr -d work
+echo     call cpr -u work                 # activates "work" profile
 echo     claude                           # runs with "work" profile
 exit /b 0
 

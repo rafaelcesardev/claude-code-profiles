@@ -24,11 +24,11 @@ The installer downloads the appropriate scripts and configures your shell. **Res
 
 ```sh
 # Create profiles
-claude-profile create work
-claude-profile create personal
+cpr -c work
+cpr -c personal
 
 # Set a default
-claude-profile default work
+cpr -d work
 
 # Just use claude — it automatically uses your default profile
 claude
@@ -36,18 +36,22 @@ claude --resume
 claude -p "explain this code"
 ```
 
+> `cpr` is a shorthand for `claude-profile`. Both work interchangeably.
+
 ## Commands
 
 | Command | Alias | Description |
 |---------|-------|-------------|
-| `claude-profile` | | Show current profile status |
-| `claude-profile use <name>` | `-u` | Switch to a profile for this session |
-| `claude-profile create <name>` | `-c` | Create a new profile |
-| `claude-profile list` | `ls`, `-l` | List all profiles |
-| `claude-profile default [name]` | `-d` | Get or set the default profile |
-| `claude-profile which [name]` | `-w` | Show the config directory path |
-| `claude-profile delete <name>` | `rm` | Delete a profile (with confirmation) |
-| `claude-profile help` | `-h`, `--help` | Show help |
+| `cpr` | | Show current profile status |
+| `cpr use <name>` | `-u` | Switch to a profile for this session |
+| `cpr create <name>` | `-c` | Create a new profile |
+| `cpr list` | `ls`, `-l` | List all profiles |
+| `cpr default [name]` | `-d` | Get or set the default profile |
+| `cpr which [name]` | `-w` | Show the config directory path |
+| `cpr delete <name>` | `rm` | Delete a profile (with confirmation) |
+| `cpr help` | `-h`, `--help` | Show help |
+
+> `cpr` and `claude-profile` are interchangeable.
 
 ## How It Works
 
@@ -65,11 +69,11 @@ To temporarily use a different profile in the current shell session:
 
 ```sh
 # Temporarily use a different profile
-claude-profile use personal
+cpr -u personal
 claude                          # uses "personal" for this shell session
 ```
 
-The override lasts until you close the shell or run `claude-profile use` again.
+The override lasts until you close the shell or run `cpr -u` again.
 
 ### Profile Storage
 
@@ -128,6 +132,7 @@ $dir = "$env:LOCALAPPDATA\claude-profile"
 New-Item -ItemType Directory -Force -Path $dir | Out-Null
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/claude-profile-init.ps1" -OutFile "$dir\claude-profile-init.ps1"
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/claude-profile.cmd" -OutFile "$dir\claude-profile.cmd"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/cpr.cmd" -OutFile "$dir\cpr.cmd"
 # Add to PowerShell profile
 Add-Content -Path $PROFILE -Value ". '$dir\claude-profile-init.ps1'"
 # Add to PATH for cmd.exe

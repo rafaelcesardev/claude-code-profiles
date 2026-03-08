@@ -8,7 +8,7 @@
 $ErrorActionPreference = 'Stop'
 
 $RepoBase = 'https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main'
-$Scripts = @('claude-profile-init.ps1', 'claude-profile.cmd')
+$Scripts = @('claude-profile-init.ps1', 'claude-profile.cmd', 'cpr.cmd')
 
 function Write-Step($msg) { Write-Host "`n=> $msg" -ForegroundColor Cyan }
 function Write-Info($msg) { Write-Host "  $msg" }
@@ -116,11 +116,11 @@ Write-Step 'Done!'
 Write-Info ''
 Write-Info 'Restart PowerShell (or run: . $PROFILE) then:'
 Write-Info ''
-Write-Info '  claude-profile create work     # Create a profile'
-Write-Info '  claude-profile default work    # Set it as default'
+Write-Info '  cpr -c work                   # Create a profile'
+Write-Info '  cpr -d work                   # Set it as default'
 Write-Info '  claude                         # Runs with the active profile'
 Write-Info ''
-Write-Info 'For cmd.exe, use: call claude-profile use work'
+Write-Info 'For cmd.exe, use: call cpr -u work'
 Write-Info ''
-Write-Info "Run 'claude-profile help' for all commands."
+Write-Info "Run 'cpr help' for all commands. ('cpr' is a shorthand for 'claude-profile')"
 Write-Host ''
