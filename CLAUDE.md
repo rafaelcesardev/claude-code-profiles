@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Cross-platform shell functions for managing multiple Claude Code configuration profiles via `CLAUDE_CONFIG_DIR`. Each profile is a complete, isolated config directory. A transparent `claude()` wrapper auto-resolves the active profile so users just run `claude` normally.
 
-Three equivalent implementations: POSIX sh (sourced), PowerShell (dot-sourced), and Windows cmd batch.
+Four equivalent implementations: POSIX sh (sourced), Fish (conf.d), PowerShell (dot-sourced), and Windows cmd batch.
 
 ## Architecture
 
@@ -14,6 +14,7 @@ The POSIX and PowerShell implementations are sourceable function files (not stan
 
 - **`claude-profile.sh`** (POSIX sh) — reference implementation. Sourced in `.bashrc`/`.zshrc`. Provides `claude()` wrapper that auto-resolves the default profile before calling the real binary via `command claude`. Provides `claude-profile()` for management commands. Strict POSIX only: no `local`, no `[[ ]]`, no arrays, no bashisms. Uses `printf` over `echo`, `_cp_`-prefixed variables, `return` (not `exit` — runs in user's shell).
 - **`claude-profile-init.ps1`** (PowerShell 5.1+/pwsh 6+) — cross-platform. Dot-sourced in `$PROFILE`. Same two-function model. Uses `$args` manual parsing (not `param()`) to avoid conflicts with PowerShell parameter binding. `Get-Command -CommandType Application` to find the real `claude` binary past the function.
+- **`claude-profile.fish`** (Fish shell) — sourced via `conf.d/`. Same two-function model. Uses Fish builtins (`set -gx`, `string match`, `set -q`). Must be placed in `conf.d/` (not `functions/`) because Fish lazy-loads `functions/` files per-function, which would prevent the `claude` wrapper from being available until `claude-profile` is called first.
 - **`claude-profile.cmd`** (Windows batch) — standalone script. Uses `goto :label` dispatch, `setlocal enabledelayedexpansion`, `endlocal & set` idiom to leak `CLAUDE_CONFIG_DIR` to the caller. No transparent `claude` wrapper (cmd limitation). Users run `call claude-profile.cmd use <name>` then `claude` separately.
 
 Profile data lives at `$XDG_DATA_HOME/claude-profiles/` (Linux/macOS, default `~/.local/share/claude-profiles/`) or `%LOCALAPPDATA%\claude-profiles\` (Windows). A `.default` file stores the default profile name as plain text without trailing newline.
@@ -22,7 +23,7 @@ The tool itself is installed at `$XDG_DATA_HOME/claude-profile/` (Linux/macOS) o
 
 ## Command Interface
 
-All three implementations share the same command interface:
+All four implementations share the same command interface:
 
 | Command | Description |
 |---------|-------------|
@@ -37,7 +38,7 @@ All three implementations share the same command interface:
 
 ## Validation Rules
 
-Profile names must match `[A-Za-z0-9_-]+`. Reject: empty, starts with `.`, contains `/` or `\` or `..`. This prevents path traversal — all three implementations enforce this identically.
+Profile names must match `[A-Za-z0-9_-]+`. Reject: empty, starts with `.`, contains `/` or `\` or `..`. This prevents path traversal — all four implementations enforce this identically.
 
 ## Checking Scripts
 
@@ -62,4 +63,4 @@ Use `git worktree` (via `.worktrees/`) for parallel branch work.
 
 ## When Modifying
 
-Any behavioral change must be applied to all three implementations (`claude-profile.sh`, `claude-profile.cmd`, `claude-profile-init.ps1`) plus updated in `README.md`. The install scripts (`install.sh`, `install.ps1`) reference `https://raw.githubusercontent.com/pegasusheavy/claude-code-profiles/main/` for download URLs.
+Any behavioral change must be applied to all four implementations (`claude-profile.sh`, `claude-profile.fish`, `claude-profile.cmd`, `claude-profile-init.ps1`) plus updated in `README.md`. The install scripts (`install.sh`, `install.ps1`) reference `https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/` for download URLs.

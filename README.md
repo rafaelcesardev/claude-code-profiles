@@ -9,13 +9,13 @@ Each profile is a complete, isolated Claude Code configuration directory (settin
 **Linux / macOS / WSL:**
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/pegasusheavy/claude-code-profiles/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/install.sh | sh
 ```
 
 **Windows (PowerShell):**
 
 ```powershell
-irm https://raw.githubusercontent.com/pegasusheavy/claude-code-profiles/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/install.ps1 | iex
 ```
 
 The installer downloads the appropriate scripts and configures your shell. **Restart your shell** (or open a new terminal) after installing.
@@ -92,6 +92,7 @@ Profile names can contain letters, digits, hyphens, and underscores. Examples: `
 | Script | Platform | Shell |
 |--------|----------|-------|
 | `claude-profile.sh` | Linux, macOS, WSL | bash, zsh (sourced) |
+| `claude-profile.fish` | Linux, macOS, WSL | fish (conf.d) |
 | `claude-profile-init.ps1` | Windows, Linux, macOS | PowerShell 5.1+ / pwsh 6+ (dot-sourced) |
 | `claude-profile.cmd` | Windows | cmd.exe (use with `call` prefix) |
 
@@ -99,16 +100,25 @@ Profile names can contain letters, digits, hyphens, and underscores. Examples: `
 
 If you prefer not to use the install scripts:
 
-**Linux / macOS:**
+**Linux / macOS (bash/zsh):**
 
 ```sh
 # Download
 mkdir -p "${XDG_DATA_HOME:-$HOME/.local/share}/claude-profile"
-curl -fsSL https://raw.githubusercontent.com/pegasusheavy/claude-code-profiles/main/claude-profile.sh \
+curl -fsSL https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/claude-profile.sh \
   -o "${XDG_DATA_HOME:-$HOME/.local/share}/claude-profile/claude-profile.sh"
 
 # Add to shell profile (.bashrc or .zshrc)
 echo '. "${XDG_DATA_HOME:-$HOME/.local/share}/claude-profile/claude-profile.sh"' >> ~/.bashrc
+```
+
+**Fish:**
+
+```fish
+# Download to conf.d (loaded on every shell startup)
+mkdir -p ~/.config/fish/conf.d
+curl -fsSL https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/claude-profile.fish \
+  -o ~/.config/fish/conf.d/claude-profile.fish
 ```
 
 **Windows (PowerShell):**
@@ -116,8 +126,8 @@ echo '. "${XDG_DATA_HOME:-$HOME/.local/share}/claude-profile/claude-profile.sh"'
 ```powershell
 $dir = "$env:LOCALAPPDATA\claude-profile"
 New-Item -ItemType Directory -Force -Path $dir | Out-Null
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/pegasusheavy/claude-code-profiles/main/claude-profile-init.ps1" -OutFile "$dir\claude-profile-init.ps1"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/pegasusheavy/claude-code-profiles/main/claude-profile.cmd" -OutFile "$dir\claude-profile.cmd"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/claude-profile-init.ps1" -OutFile "$dir\claude-profile-init.ps1"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/claude-profile.cmd" -OutFile "$dir\claude-profile.cmd"
 # Add to PowerShell profile
 Add-Content -Path $PROFILE -Value ". '$dir\claude-profile-init.ps1'"
 # Add to PATH for cmd.exe

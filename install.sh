@@ -3,10 +3,10 @@ set -e
 
 # claude-code-profiles installer
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/pegasusheavy/claude-code-profiles/main/install.sh | sh
-#   wget -qO- https://raw.githubusercontent.com/pegasusheavy/claude-code-profiles/main/install.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/install.sh | sh
+#   wget -qO- https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main/install.sh | sh
 
-REPO_BASE="https://raw.githubusercontent.com/pegasusheavy/claude-code-profiles/main"
+REPO_BASE="https://raw.githubusercontent.com/rafaelcesardev/claude-code-profiles/main"
 
 # --- Helpers ---
 
@@ -110,30 +110,60 @@ main() {
     case "$_shell_name" in
         zsh)  _profile_file="${ZDOTDIR:-$HOME}/.zshrc" ;;
         bash) _profile_file="${HOME}/.bashrc" ;;
+        fish) _profile_file="fish" ;;
         *)    _profile_file="" ;;
     esac
 
-    # Single quotes are intentional: the expression must expand in the
-    # user's shell at login, not during installation.
-    # shellcheck disable=SC2016
-    _source_line='. "${XDG_DATA_HOME:-$HOME/.local/share}/claude-profile/claude-profile.sh"'
+    if [ "$_shell_name" = "fish" ]; then
+        # Fish: download fish script and install to conf.d
+        step "Downloading claude-profile.fish..."
+        _tmp_fish="$(mktemp)"
+        download_file "${REPO_BASE}/claude-profile.fish" "$_tmp_fish" || fail "Download of fish script failed."
+        cp "$_tmp_fish" "${INSTALL_DIR}/claude-profile.fish"
+        chmod +r "${INSTALL_DIR}/claude-profile.fish"
+        rm -f "$_tmp_fish"
+        info "Installed: ${INSTALL_DIR}/claude-profile.fish"
 
-    if [ -n "$_profile_file" ]; then
-        # Idempotent: check if already present
-        if [ -f "$_profile_file" ] && grep -qF 'claude-profile.sh' "$_profile_file" 2>/dev/null; then
-            info "Source line already in $_profile_file"
+        # Install conf.d stub that sources from the install dir
+        _fish_conf_d="${XDG_CONFIG_HOME:-$HOME/.config}/fish/conf.d"
+        mkdir -p "$_fish_conf_d"
+        _fish_conf_file="${_fish_conf_d}/claude-profile.fish"
+        if [ -f "$_fish_conf_file" ] && grep -qF 'claude-profile' "$_fish_conf_file" 2>/dev/null; then
+            info "Fish conf.d file already exists: $_fish_conf_file"
         else
-            printf '\n# claude-profile: manage Claude Code configuration profiles\n%s\n' "$_source_line" >> "$_profile_file"
-            info "Added source line to $_profile_file"
+            printf '# claude-profile: manage Claude Code configuration profiles\nsource "%s/claude-profile.fish"\n' "$INSTALL_DIR" > "$_fish_conf_file"
+            info "Created: $_fish_conf_file"
         fi
     else
-        info "Could not detect shell profile. Add this to your shell profile manually:"
-        info "  $_source_line"
+        # Bash/Zsh: source line in shell profile
+        # Single quotes are intentional: the expression must expand in the
+        # user's shell at login, not during installation.
+        # shellcheck disable=SC2016
+        _source_line='. "${XDG_DATA_HOME:-$HOME/.local/share}/claude-profile/claude-profile.sh"'
+
+        if [ -n "$_profile_file" ]; then
+            # Idempotent: check if already present
+            if [ -f "$_profile_file" ] && grep -qF 'claude-profile.sh' "$_profile_file" 2>/dev/null; then
+                info "Source line already in $_profile_file"
+            else
+                printf '\n# claude-profile: manage Claude Code configuration profiles\n%s\n' "$_source_line" >> "$_profile_file"
+                info "Added source line to $_profile_file"
+            fi
+        else
+            info "Could not detect shell profile. Add this to your shell profile manually:"
+            info "  $_source_line"
+        fi
     fi
 
     step "Done!"
     info ""
-    info "Restart your shell (or run: source $_profile_file) then:"
+    if [ "$_shell_name" = "fish" ]; then
+        info "Restart your shell (or run: source ${_fish_conf_d}/claude-profile.fish) then:"
+    elif [ -n "$_profile_file" ]; then
+        info "Restart your shell (or run: source $_profile_file) then:"
+    else
+        info "Restart your shell, then:"
+    fi
     info ""
     info "  claude-profile create work     # Create a profile"
     info "  claude-profile default work    # Set it as default"
