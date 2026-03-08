@@ -12,12 +12,18 @@ if "%~1"=="" goto :cmd_launch_default
 
 :: Command dispatch
 if "%~1"=="create"  goto :dispatch_create
+if "%~1"=="-c"      goto :dispatch_create
 if "%~1"=="list"    goto :dispatch_list
 if "%~1"=="ls"      goto :dispatch_list
+if "%~1"=="-l"      goto :dispatch_list
 if "%~1"=="default" goto :dispatch_default
+if "%~1"=="-d"      goto :dispatch_default
 if "%~1"=="which"   goto :dispatch_which
+if "%~1"=="-w"      goto :dispatch_which
 if "%~1"=="use"     goto :dispatch_use
+if "%~1"=="-u"      goto :dispatch_use
 if "%~1"=="delete"  goto :dispatch_delete
+if "%~1"=="rm"      goto :dispatch_delete
 if "%~1"=="help"    goto :usage
 if "%~1"=="-h"      goto :usage
 if "%~1"=="--help"  goto :usage
@@ -66,12 +72,12 @@ echo Usage: claude-profile [command] [args...]
 echo.
 echo Commands:
 echo     (no command)            Activate the default profile
-echo     use ^<name^>              Activate the named profile
-echo     create ^<name^>           Create a new profile
-echo     list, ls                List all profiles
-echo     default [name]          Get or set the default profile
-echo     delete ^<name^>           Delete a profile
-echo     which [name]            Show the resolved config directory path
+echo     use, -u ^<name^>          Activate the named profile
+echo     create, -c ^<name^>       Create a new profile
+echo     list, ls, -l            List all profiles
+echo     default, -d [name]      Get or set the default profile
+echo     delete, rm ^<name^>       Delete a profile
+echo     which, -w [name]        Show the resolved config directory path
 echo     help, -h, --help        Show this help message
 echo.
 echo Use 'call claude-profile use ^<name^>' to set CLAUDE_CONFIG_DIR in the

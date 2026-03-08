@@ -71,7 +71,7 @@ claude-profile() {
     _cp_default_file="${_cp_data}/.default"
 
     case "${1:-}" in
-        use)
+        use|-u)
             shift
             if [ -z "${1:-}" ]; then
                 _cp_die "usage: claude-profile use <name>"
@@ -93,7 +93,7 @@ claude-profile() {
             printf 'Switched to profile: %s\n' "$_cp_name"
             ;;
 
-        create)
+        create|-c)
             shift
             if [ -z "${1:-}" ]; then
                 _cp_die "usage: claude-profile create <name>"
@@ -111,7 +111,7 @@ claude-profile() {
             printf 'Config directory: %s\n' "$_cp_dir"
             ;;
 
-        list|ls)
+        list|ls|-l)
             if [ ! -d "$_cp_data" ]; then
                 printf 'No profiles found. Create one with: claude-profile create <name>\n'
                 return 0
@@ -157,7 +157,7 @@ claude-profile() {
             fi
             ;;
 
-        default)
+        default|-d)
             shift
             if [ -z "${1:-}" ]; then
                 if [ -f "$_cp_default_file" ]; then
@@ -186,7 +186,7 @@ claude-profile() {
             printf 'Default profile set to: %s\n' "$_cp_name"
             ;;
 
-        which)
+        which|-w)
             shift
             if [ -n "${1:-}" ]; then
                 _cp_name="$1"
@@ -216,7 +216,7 @@ claude-profile() {
             fi
             ;;
 
-        delete)
+        delete|rm)
             shift
             if [ -z "${1:-}" ]; then
                 _cp_die "usage: claude-profile delete <name>"
@@ -261,12 +261,12 @@ Usage: claude-profile [command] [args...]
 
 Commands:
     (no command)            Show current profile status
-    use <name>              Switch session to the named profile
-    create <name>           Create a new profile
-    list, ls                List all profiles
-    default [name]          Get or set the default profile
-    which [name]            Show the resolved config directory path
-    delete <name>           Delete a profile
+    use, -u <name>          Switch session to the named profile
+    create, -c <name>       Create a new profile
+    list, ls, -l            List all profiles
+    default, -d [name]      Get or set the default profile
+    which, -w [name]        Show the resolved config directory path
+    delete, rm <name>       Delete a profile
     help, -h, --help        Show this help message
 
 The claude command automatically uses the default profile. Use

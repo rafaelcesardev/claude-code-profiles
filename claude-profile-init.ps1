@@ -101,7 +101,7 @@ function claude-profile {
     # --- Command dispatch ---
 
     switch ($Command) {
-        'use' {
+        { $_ -eq 'use' -or $_ -eq '-u' } {
             $ArgName = if ($Rest.Count -gt 0) { $Rest[0] } else { $null }
             if ([string]::IsNullOrEmpty($ArgName)) {
                 _cp_die 'usage: claude-profile use <name>'
@@ -121,7 +121,7 @@ function claude-profile {
             Write-Host "Switched to profile: $ArgName"
         }
 
-        'create' {
+        { $_ -eq 'create' -or $_ -eq '-c' } {
             $ArgName = if ($Rest.Count -gt 0) { $Rest[0] } else { $null }
             if ([string]::IsNullOrEmpty($ArgName)) {
                 _cp_die 'usage: claude-profile create <name>'
@@ -138,7 +138,7 @@ function claude-profile {
             Write-Host "Config directory: $ProfileDir"
         }
 
-        { $_ -eq 'list' -or $_ -eq 'ls' } {
+        { $_ -eq 'list' -or $_ -eq 'ls' -or $_ -eq '-l' } {
             if (-not (Test-Path $DataDir -PathType Container)) {
                 Write-Host 'No profiles found. Create one with: claude-profile create <name>'
                 return
@@ -176,7 +176,7 @@ function claude-profile {
             }
         }
 
-        'default' {
+        { $_ -eq 'default' -or $_ -eq '-d' } {
             $ArgName = if ($Rest.Count -gt 0) { $Rest[0] } else { $null }
             if ([string]::IsNullOrEmpty($ArgName)) {
                 # Get default
@@ -208,7 +208,7 @@ function claude-profile {
             Write-Host "Default profile set to: $ArgName"
         }
 
-        'which' {
+        { $_ -eq 'which' -or $_ -eq '-w' } {
             $ArgName = if ($Rest.Count -gt 0) { $Rest[0] } else { $null }
             if (-not [string]::IsNullOrEmpty($ArgName)) {
                 # Named profile
@@ -239,7 +239,7 @@ function claude-profile {
             }
         }
 
-        'delete' {
+        { $_ -eq 'delete' -or $_ -eq 'rm' } {
             $ArgName = if ($Rest.Count -gt 0) { $Rest[0] } else { $null }
             if ([string]::IsNullOrEmpty($ArgName)) {
                 _cp_die 'usage: claude-profile delete <name>'
@@ -273,18 +273,18 @@ function claude-profile {
             }
         }
 
-        { $_ -eq 'help' -or $_ -eq '-h' -or $_ -eq '--help' } {
+        { $_ -in 'help', '-h', '--help' } {
             Write-Host @"
 Usage: claude-profile [command] [args...]
 
 Commands:
     (no command)            Show current profile status
-    use <name>              Switch session to the named profile
-    create <name>           Create a new profile
-    list, ls                List all profiles
-    default [name]          Get or set the default profile
-    which [name]            Show the resolved config directory path
-    delete <name>           Delete a profile
+    use, -u <name>          Switch session to the named profile
+    create, -c <name>       Create a new profile
+    list, ls, -l            List all profiles
+    default, -d [name]      Get or set the default profile
+    which, -w [name]        Show the resolved config directory path
+    delete, rm <name>       Delete a profile
     help, -h, --help        Show this help message
 
 The claude command automatically uses the default profile. Use

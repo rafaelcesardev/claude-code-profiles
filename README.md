@@ -38,16 +38,16 @@ claude -p "explain this code"
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `claude-profile` | Show current profile status |
-| `claude-profile use <name>` | Switch to a profile for this session |
-| `claude-profile create <name>` | Create a new profile |
-| `claude-profile list` | List all profiles |
-| `claude-profile default [name]` | Get or set the default profile |
-| `claude-profile delete <name>` | Delete a profile (with confirmation) |
-| `claude-profile which [name]` | Show the config directory path |
-| `claude-profile help` | Show help |
+| Command | Alias | Description |
+|---------|-------|-------------|
+| `claude-profile` | | Show current profile status |
+| `claude-profile use <name>` | `-u` | Switch to a profile for this session |
+| `claude-profile create <name>` | `-c` | Create a new profile |
+| `claude-profile list` | `ls`, `-l` | List all profiles |
+| `claude-profile default [name]` | `-d` | Get or set the default profile |
+| `claude-profile which [name]` | `-w` | Show the config directory path |
+| `claude-profile delete <name>` | `rm` | Delete a profile (with confirmation) |
+| `claude-profile help` | `-h`, `--help` | Show help |
 
 ## How It Works
 

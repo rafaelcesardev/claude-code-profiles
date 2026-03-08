@@ -68,7 +68,7 @@ function claude-profile
 
     switch "$cmd"
 
-        case use
+        case use -u
             if test (count $argv) -lt 2
                 _cp_die "usage: claude-profile use <name>"
                 return 1
@@ -83,7 +83,7 @@ function claude-profile
             set -gx CLAUDE_CONFIG_DIR "$dir"
             echo "Switched to profile: $name"
 
-        case create
+        case create -c
             if test (count $argv) -lt 2
                 _cp_die "usage: claude-profile create <name>"
                 return 1
@@ -99,7 +99,7 @@ function claude-profile
             echo "Created profile: $name"
             echo "Config directory: $dir"
 
-        case list ls
+        case list ls -l
             if not test -d "$_CP_DATA"
                 echo "No profiles found. Create one with: claude-profile create <name>"
                 return 0
@@ -135,7 +135,7 @@ function claude-profile
                 echo "No profiles found. Create one with: claude-profile create <name>"
             end
 
-        case default
+        case default -d
             if test (count $argv) -lt 2
                 if test -f "$def_file"
                     set -l name (cat "$def_file")
@@ -162,7 +162,7 @@ function claude-profile
             echo -n "$name" > "$def_file"
             echo "Default profile set to: $name"
 
-        case which
+        case which -w
             if test (count $argv) -ge 2
                 set -l name $argv[2]
                 _cp_validate_name $name; or return 1
@@ -190,7 +190,7 @@ function claude-profile
                 echo "$dir"
             end
 
-        case delete
+        case delete rm
             if test (count $argv) -lt 2
                 _cp_die "usage: claude-profile delete <name>"
                 return 1
@@ -227,12 +227,12 @@ function claude-profile
             echo ""
             echo "Commands:"
             echo "    (no command)            Show current profile status"
-            echo "    use <name>              Switch session to the named profile"
-            echo "    create <name>           Create a new profile"
-            echo "    list, ls                List all profiles"
-            echo "    default [name]          Get or set the default profile"
-            echo "    which [name]            Show the resolved config directory path"
-            echo "    delete <name>           Delete a profile"
+            echo "    use, -u <name>          Switch session to the named profile"
+            echo "    create, -c <name>       Create a new profile"
+            echo "    list, ls, -l            List all profiles"
+            echo "    default, -d [name]      Get or set the default profile"
+            echo "    which, -w [name]        Show the resolved config directory path"
+            echo "    delete, rm <name>       Delete a profile"
             echo "    help, -h, --help        Show this help message"
             echo ""
             echo "The claude command automatically uses the default profile. Use"
